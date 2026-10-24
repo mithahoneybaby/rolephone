@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>정우영 휴대폰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:#d9dde3;font-family:'Noto Sans KR',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;overflow:hidden;-webkit-user-select:none;user-select:none}
+.phone{position:relative;width:100%;height:100dvh;background:#fff;overflow:hidden}
+@media (min-width:500px){.phone{width:390px;height:min(844px,94dvh);border-radius:44px;box-shadow:0 0 0 10px #111,0 30px 60px rgba(0,0,0,.3)}}
+
+/* 상태바 */
+.statusbar{position:absolute;top:0;left:0;right:0;height:calc(env(safe-area-inset-top) + 34px);padding:env(safe-area-inset-top) 24px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:#111;z-index:10;transition:color .4s}
+.phone.dark .statusbar{color:#fff}
+
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;padding-top:calc(env(safe-area-inset-top) + 34px);opacity:0;pointer-events:none;transition:opacity .45s,transform .45s}
+.screen.active{opacity:1;pointer-events:auto}
+
+/* 메시지 화면 */
+#chat{background:#fff}
+.chat-head{display:flex;align-items:center;gap:10px;padding:6px 14px 10px;border-bottom:1px solid #eef0f3}
+.x{border:0;background:none;font-size:18px;color:#333;width:30px;height:30px;cursor:pointer}
+.who{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:500;color:#111}
+.ava{width:32px;height:32px;border-radius:50%;background:#c3c9d2;color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.log{flex:1;overflow-y:auto;padding:18px 14px 90px;display:flex;flex-direction:column;gap:5px;scroll-behavior:smooth}
+.b{max-width:72%;padding:10px 15px;border-radius:20px;font-size:15px;line-height:1.45;word-break:keep-all;animation:pop .25s ease-out}
+.b.me{align-self:flex-end;background:#2f7cf6;color:#fff;border-bottom-right-radius:6px}
+.b.them{align-self:flex-start;background:#eef0f3;color:#111;border-bottom-left-radius:6px}
+.b.gap{margin-top:14px}
+.notice{align-self:center;font-size:12px;color:#8a909a;background:#f4f5f7;padding:5px 12px;border-radius:12px;margin:14px 0 4px;animation:pop .25s ease-out}
+.typing{display:flex;gap:4px;padding:14px 16px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#9aa1ab;animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+.inputbar{padding:8px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eef0f3;background:#fff}
+.fake-input{border:1px solid #e1e4e8;border-radius:20px;padding:9px 15px;color:#a0a6af;font-size:14px}
+
+/* 전화 화면 공통 */
+#incoming,#call,#ended{background:linear-gradient(180deg,#2d3442 0%,#12151b 100%);color:#fff;align-items:center}
+.big-ava{width:96px;height:96px;border-radius:50%;background:#5b6474;display:grid;place-items:center;font-size:36px;font-weight:500;margin:0 auto 18px}
+
+/* 수신 화면 */
+#incoming{justify-content:space-between;padding-bottom:calc(64px + env(safe-area-inset-bottom));transform:translateY(40px)}
+#incoming.active{transform:none}
+.caller{text-align:center;margin-top:72px}
+.caller h1{font-size:30px;font-weight:500}
+.caller p{opacity:.6;margin-top:6px;font-size:15px}
+.btns{display:flex;gap:96px}
+.cbtn{width:70px;height:70px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer}
+.decline{background:#ff3b30}.decline svg{transform:rotate(135deg)}
+.accept{background:#34c759;animation:ring 1.3s infinite}
+.lbl{font-size:13px;opacity:.7;text-align:center;margin-top:9px}
+.shake{animation:shake .4s}
+
+/* 통화 화면 */
+#call{padding-bottom:calc(44px + env(safe-area-inset-bottom))}
+.call-top{text-align:center;margin-top:36px}
+.call-top .big-ava{width:72px;height:72px;font-size:28px;margin-bottom:12px}
+.call-top h2{font-size:24px;font-weight:500}
+#timer{opacity:.6;font-size:15px;margin-top:4px;font-variant-numeric:tabular-nums}
+.script{flex:1;width:100%;padding:24px 30px 120px;display:flex;flex-direction:column;justify-content:flex-end;gap:18px;overflow:hidden}
+.line{font-size:18px;line-height:1.6;word-break:keep-all;transition:opacity .4s;animation:pop .3s ease-out}
+.line.them{font-style:italic}
+.line.me{color:#a9c0e4;text-align:right;font-size:16px}
+.line.old{opacity:.32}
+.line.action{font-size:14px;color:#c9ced8;opacity:.85;text-align:center;line-height:1.6}
+.line.action.old{opacity:.3}
+.spk{display:block;font-size:11px;font-style:normal;letter-spacing:.04em;opacity:.55;margin-bottom:2px}
+.endbtn{background:#ff3b30}
+
+/* 종료 화면 */
+#ended{justify-content:center;gap:6px}
+#ended h2{font-size:22px;font-weight:500;margin-top:4px}
+#ended p{opacity:.6;font-size:15px;font-variant-numeric:tabular-nums}
+.again{margin-top:36px;display:flex;gap:12px}
+.again button{border:0;border-radius:22px;padding:11px 22px;font-size:14px;font-family:inherit;cursor:pointer;background:rgba(255,255,255,.14);color:#fff}
+
+/* 안내 문구 */
+.hint{position:absolute;left:0;right:0;bottom:calc(140px + env(safe-area-inset-bottom));text-align:center;font-size:12px;color:#9aa1ab;pointer-events:none;opacity:0;transition:opacity .4s;z-index:9}
+.hint.on{opacity:1;animation:breathe 2s infinite}
+.phone.dark .hint{color:rgba(255,255,255,.5)}
+
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.97)}}
+@keyframes dot{0%,60%,100%{opacity:.35;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(52,199,89,.55)}70%,100%{box-shadow:0 0 0 20px rgba(52,199,89,0)}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes breathe{50%{opacity:.4}}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div class="statusbar"><span id="clock">23:41</span><span>3G ▮▮▮</span></div>
+
+  <!-- 1. 메시지 화면 -->
+  <section class="screen active" id="chat">
+    <header class="chat-head">
+      <button class="x" onclick="closePhone(event)">✕</button>
+      <div class="who"><div class="ava" data-initial></div><span data-name></span></div>
+    </header>
+    <div class="log" id="log"></div>
+    <div class="inputbar"><div class="fake-input">메시지</div></div>
+  </section>
+
+  <!-- 2. 전화 수신 화면 -->
+  <section class="screen" id="incoming">
+    <div class="caller">
+      <div class="big-ava" data-initial></div>
+      <h1 data-name></h1>
+      <p>휴대전화</p>
+    </div>
+    <div class="btns">
+      <div><button class="cbtn decline" id="declineBtn" onclick="decline(event)"><svg viewBox="0 0 24 24" width="30" height="30" fill="#fff"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button><div class="lbl">거절</div></div>
+      <div><button class="cbtn accept" onclick="accept(event)"><svg viewBox="0 0 24 24" width="30" height="30" fill="#fff"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button><div class="lbl">수락</div></div>
+    </div>
+  </section>
+
+  <!-- 3. 통화 화면 -->
+  <section class="screen" id="call">
+    <div class="call-top">
+      <div class="big-ava" data-initial></div>
+      <h2 data-name></h2>
+      <div id="timer">00:00</div>
+    </div>
+    <div class="script" id="script"></div>
+    <button class="cbtn endbtn" onclick="endCall(event)"><svg viewBox="0 0 24 24" width="30" height="30" fill="#fff" style="transform:rotate(135deg)"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
+  </section>
+
+  <!-- 4. 통화 종료 화면 -->
+  <section class="screen" id="ended">
+    <div class="big-ava" data-initial></div>
+    <h2>통화 종료</h2>
+    <p id="endTime">00:00</p>
+    <div class="again">
+      <button onclick="replay(event)">다시 보기</button>
+      <button onclick="closePhone(event)">닫기</button>
+    </div>
+  </section>
+
+  <div class="hint" id="hint">화면을 터치하세요</div>
+</div>
+
+<script>
+/* ============================================
+   ✏️ 여기만 고치면 내용이 바뀌어요
+   from: 'me'   → 내가 보낸 메시지 (파란색, 오른쪽)
+   from: 'them' → 상대가 보낸 메시지 (회색, 왼쪽)
+   type: 'notice' → 가운데 회색 안내 문구
+   ============================================ */
+const CONTACT = '최산';     // 상대 이름
+const INITIAL = '산';       // 프로필 동그라미 글자
+const ME = '정우영';        // 통화 자막에 뜰 내 이름
+
+const MESSAGES = [
+  { from: 'me',   text: '오늘 안만나고싶어' },
+  { from: 'them', text: '왜?' },
+  { from: 'them', text: '전화해도 돼?' },
+  { from: 'them', text: '우영아' },
+  { type: 'notice', text: '📞 부재중 전화 5통' },
+  { from: 'me',   text: '아파' },
+  { from: 'me',   text: '체한거같아' },
+  { from: 'me',   text: '만나고싶어' },
+  { from: 'them', text: '집이야?' },
+  { from: 'me',   text: '응' },
+  { from: 'them', text: '갈게 조금만 기다려' },
+];
+
+const CALL = [
+  { from: 'them', text: '우요이이.' },
+  { from: 'me',   text: '…응.' },
+  { from: 'them', text: '일층으로 와. 마이 아프면 이것만 주고 갈게.' },
+  { from: 'me',   text: '……' },
+  { from: 'them', text: '응? 우영아. 얼굴만 보여주라아.' },
+  { type: 'action', text: '(정우영은 코를 훌쩍이고 대답했다.)' },
+  { from: 'me',   text: '우웅.' },
+  { type: 'action', text: '(그거면 됐다는 듯 최산은 작게 웃었다.)' },
+];
+/* ============================================ */
+
+const $ = id => document.getElementById(id);
+const phone = $('phone');
+let stage = 'chat', mi = 0, ci = 0, busy = false, lastFrom = null;
+let sec = 0, tick = null, typer = null;
+
+document.querySelectorAll('[data-name]').forEach(e => e.textContent = CONTACT);
+document.querySelectorAll('[data-initial]').forEach(e => e.textContent = INITIAL);
+const now = new Date();
+$('clock').textContent = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+  phone.classList.toggle('dark', id !== 'chat');
+  stage = id;
+}
+function hint(on){ $('hint').classList.toggle('on', on); }
+function scrollDown(){ const l = $('log'); l.scrollTop = l.scrollHeight; }
+
+/* 메시지 */
+function addBubble(m){
+  const d = document.createElement('div');
+  if (m.type === 'notice'){ d.className = 'notice'; lastFrom = null; }
+  else { d.className = 'b ' + m.from + (lastFrom && lastFrom !== m.from ? ' gap' : ''); lastFrom = m.from; }
+  d.textContent = m.text;
+  $('log').appendChild(d);
+  scrollDown();
+}
+function nextChat(){
+  if (busy || mi >= MESSAGES.length) return;
+  const m = MESSAGES[mi++];
+  if (m.from === 'them'){
+    busy = true;
+    const t = document.createElement('div');
+    t.className = 'b them typing' + (lastFrom && lastFrom !== 'them' ? ' gap' : '');
+    t.innerHTML = '<i></i><i></i><i></i>';
+    $('log').appendChild(t); scrollDown();
+    setTimeout(() => { t.remove(); addBubble(m); busy = false; afterChat(); }, 900);
+  } else { addBubble(m); afterChat(); }
+}
+function afterChat(){
+  if (mi >= MESSAGES.length){ hint(false); setTimeout(() => show('incoming'), 1600); }
+}
+
+/* 전화 */
+function decline(e){
+  e.stopPropagation();
+  const b = $('declineBtn'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+}
+function fmt(s){ return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0'); }
+function accept(e){
+  e.stopPropagation();
+  show('call'); sec = 0; $('timer').textContent = '00:00';
+  tick = setInterval(() => { sec++; $('timer').textContent = fmt(sec); }, 1000);
+  hint(true);
+  setTimeout(nextCall, 800);
+}
+function stopType(){ clearInterval(typer.id); typer = null; }
+function nextCall(){
+  if (typer){ typer.el.textContent = typer.text; stopType(); return; }  // 타이핑 중 터치하면 바로 완성
+  if (ci >= CALL.length){ endCall(); return; }
+  const m = CALL[ci++];
+  const box = $('script');
+  box.querySelectorAll('.line').forEach(l => l.classList.add('old'));
+  const d = document.createElement('div');
+  if (m.type === 'action'){
+    d.className = 'line action'; d.textContent = m.text; box.appendChild(d);
+    const al = box.querySelectorAll('.line'); if (al.length > 6) al[0].remove();
+    return;
+  }
+  d.className = 'line ' + m.from;
+  const s = document.createElement('span'); s.className = 'spk'; s.textContent = m.from === 'them' ? CONTACT : ME;
+  const t = document.createElement('span');
+  d.append(s, t); box.appendChild(d);
+  if (m.from === 'them'){
+    let i = 0;
+    typer = { el: t, text: m.text, id: setInterval(() => { t.textContent = m.text.slice(0, ++i); if (i >= m.text.length) stopType(); }, 75) };
+  } else t.textContent = m.text;
+  const lines = box.querySelectorAll('.line');
+  if (lines.length > 6) lines[0].remove();
+}
+function endCall(e){
+  if (e) e.stopPropagation();
+  if (typer) stopType();
+  clearInterval(tick); hint(false);
+  $('endTime').textContent = fmt(sec);
+  show('ended');
+}
+
+/* 다시 보기 / 닫기 */
+function replay(e){
+  e.stopPropagation();
+  mi = ci = 0; lastFrom = null; $('log').innerHTML = ''; $('script').innerHTML = '';
+  show('chat'); hint(true); setTimeout(nextChat, 500);
+}
+function closePhone(e){
+  e.stopPropagation();
+  if (history.length > 1) history.back(); else window.close();
+}
+
+/* 화면 터치로 진행 */
+phone.addEventListener('click', () => {
+  if (stage === 'chat') nextChat();
+  else if (stage === 'call') nextCall();
+});
+
+hint(true);
+setTimeout(nextChat, 600);
+</script>
+</body>
+</html>
